@@ -35,7 +35,7 @@ def vote():
 	if not user_id:
 		flask.session['uid'] = uuid.uuid4()
 	app.logger.debug(flask.session['uid']);
-	return render_template('index.html')
+	return render_template('vote.html', voterid=flask.session['uid'])
 
 # app gets created so it'll exist if it's main or not
 if __name__ == "__main__":

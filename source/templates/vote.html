@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html lang="en">
 <head>
-  <title>election integrity page</title>
+  <title>Submit a Vote</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css"/>
   <!-- jquery from cdn. (probably cached)? -->
@@ -9,10 +9,11 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="text-center">Election Integrity Home Page</h1>
+    <h1 class="text-center">Election Integrity Voting Page</h1>
     <p class="text-center">
-      <a href="vote">VOTE HERE</a>
-    </p><br />
+      <a href="index">HOME</a>
+    </p>
+    <p class="text-center">Your ID: {{ voterid }}</p><br />
     <!-- flash flask messages for errors/notifications -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
