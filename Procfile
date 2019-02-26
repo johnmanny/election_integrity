@@ -1,1 +1,1 @@
-web: python flask_mail.py
+web: python flask_main.py
