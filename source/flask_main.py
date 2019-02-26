@@ -4,10 +4,12 @@
 
 import flask
 from flask import render_template
-#from flask import request
+from flask import request
+from flask import session
 #from flask import url_for
 import json
 import logging
+import uuid
 
 app = flask.Flask(__name__)
 # sets debug level for app
@@ -27,6 +29,13 @@ def index():
 	app.logger.debug("LEAVING INDEX")
 	return render_template('index.html')
 
+@app.route("/vote")
+def vote():
+	user_id = session.get('uid')
+	if not user_id:
+		flask.session['uid'] = uuid.uuid4()
+	app.logger.debug(flask.session['uid']);
+	return render_template('vote.html', voterid=flask.session['uid'])
 
 # app gets created so it'll exist if it's main or not
 if __name__ == "__main__":
