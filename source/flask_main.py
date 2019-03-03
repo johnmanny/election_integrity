@@ -50,13 +50,16 @@ def admin():
 
 	return render_template('admin.html')
 
-
 @app.errorhandler(404)
 def page_not_found(error):
 	app.logger.debug("page not found")
-	return flask.render_template('not_found.html', badurl=request.base_url, linkback=url_for("index")), 404
+	return flask.render_template('not_found.html',
+			 badurl=request.base_url,
+			 linkback=url_for("index")), 404
 
-
+"""
+################################# main program area
+"""
 # app gets created so it'll exist if it's main or not
 if __name__ == "__main__":
 	app.run(port=8000,host="0.0.0.0")
