@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html lang="en">
 <head>
-  <title>election integrity page</title>
+  <title>404 page</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css"/>
   <!-- jquery from cdn. (probably cached)? -->
@@ -12,10 +12,7 @@
 <body>
 
   <div class="container">
-    <h1 class="text-center">Election Integrity Home Page</h1>
-    <p class="text-center">
-      <a href="vote">VOTE HERE</a>
-    </p><br />
+    <h1 class="text-center">Voting verification page</h1>
     <!-- flash flask messages for errors/notifications -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -31,28 +28,6 @@
 
 
   </div>  <!-- container (for bootstrap) -->
-
-<div class="container-fluid">
-  <div class="row content">
-    <div class="col-sm-3 sidenav">
-      <h4>Pages</h4>
-        <br /><a href="#section1">Home</a><br />
-        <a href="#section2">Vote</a><br />
-        <a href="#section3">Voting Results?</a><br />
-        <a href="#section3">Administration</a><br />
-      <br>
-    </div>
-
-    <div class="col-sm-9">
-      <h4><small>INFORMATION</small></h4>
-      <hr>
-    </div>
-  </div>
-</div>
-
-<footer class="container-fluid">
-  <p>Footer Text</p>
-</footer>
 
 </body>
 </html>
