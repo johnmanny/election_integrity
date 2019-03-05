@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html lang="en">
 <head>
-  <title>election integrity page</title>
+  <title>Register to Vote</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css"/>
   <!-- jquery from cdn. (probably cached)? -->
@@ -9,12 +9,28 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="text-center">Election Integrity Home Page</h1>
+    <h1 class="text-center">Election Integrity Registration Page</h1>
     <p class="text-center">
-      <a href="register">REGISTER TO VOTE</a>
+      <a href="index">HOME</a>
     </p>
     <p class="text-center">
-      <a href="vote">VOTE HERE</a>
+      <button type="button" onclick="loadDoc()">Generate Key</button>
+      <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+      <script type="text/javascript">
+          function loadDoc() {
+              $.ajax({
+                  url: "/generate_key",
+                  method: "POST",
+                  data: JSON.stringify($(this).attr("id")),
+                  contentType: 'application/json;charset=UTF-8',
+                  success: function(data) {
+                      $('.voterkey').text(data)
+                  }
+              })
+          };
+      </script>
+      <div class="voterkey">
+      </div>
     </p>
     <p class="text-center">Your ID: {{ voterid }}</p><br />
     <!-- flash flask messages for errors/notifications -->
