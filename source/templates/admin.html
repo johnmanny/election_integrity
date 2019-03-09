@@ -24,7 +24,50 @@
       {% endif %}
     {% endwith %}
 
+  <div class="row">
+    <div class="col text-center">
+      <form id="entry">
+	<label for="attempt">Password:</label>
+	<input id="attempt" name="attempt" type="text" width="15" autocomplete="off" autofocus />
+      </form>
+    </div>
+  </div>
 
+  <script>
+
+  // kill normal function of form submission
+  //$("#entry").submit( function(event) {
+  //	  event.preventDefault();
+  //	});
+
+  $("#entry").submit( function(event) {
+  	  //event.preventDefault();
+	  var txt = $("attempt").val();
+	  $.getJSON("/_pc", { text : txt },
+			  function(received) {
+				  attmpt = received;
+				  console.log(attmpt);
+				  if (attmpt == 1) {
+					  console.log("correct password enetered");
+				  }
+  	});
+  });
+
+  /*
+  $("#attempt").submit(function(event) {
+	  var txt = $("attempt").val();
+	  $.getJSON("/_pc", { text : txt },
+			  function(received) {
+				  
+				  attmpt = received;
+				  if (attmpt) {
+					  console.log("correct password enetered");
+				  }
+
+		  })
+  });
+  */
+  <script>
 
 
   </div>  <!-- container (for bootstrap) -->

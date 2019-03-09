@@ -1,7 +1,9 @@
-# Authors: John Nemeth
+# Authors: Taylor Santos, John Nemeth
 # Description:
 # Sources: 
 
+from werkzeug.security import generate_password_hash, \
+        check_password_hash
 import flask
 from flask import render_template
 from flask import request
@@ -20,6 +22,12 @@ app.debug=True
 app.logger.setLevel(logging.DEBUG)
 app.secret_key="P3a9n71Dlb8Pkb3Qv481nk5PjnD"
 APPLICATION_NAME = 'blog page'
+
+# if this were real solution, would obviously not set password here
+password = "test"
+salt = "googleyeyes"
+pw_hash = generate_password_hash(password + salt)
+
 
 def get_user_id():
 	user_id = session.get('uid')
@@ -81,6 +89,28 @@ def page_not_found(error):
 	return flask.render_template('not_found.html',
 			 badurl=request.base_url,
 			 linkback=url_for("index")), 404
+
+"""
+###############################  AJAX Request Handler 
+"""
+#--------------------NOT WORKING - NEED TO FIX
+#password checker
+@app.route("/_pc")
+def pc():
+    app.logger.debug("GOT PASSWORD CHECK")
+
+    pw_attempt = flask.request.args.get("text", type=str)
+    
+    #pw_attempt = pw_attempt + salt
+    gen_hash = generate_password_hash(pw_attempt + salt)
+    if gen_hash == pw_hash:
+        print ("get it")
+        rslt = 1
+    else:
+        rslt = 0
+        
+    return flask.jsonify(result=rslt)
+
 
 """
 ################################# main program area
