@@ -24,7 +24,30 @@
       {% endif %}
     {% endwith %}
 
-  {% if g.wp is not defined %}  
+  {% if session.wp is defined %}
+  <!-- specify topic of vote --!>
+  <div id="enterinfo">
+    <h1>Enter Vote Attributes:</h1><br>
+    <form id="entry" method="POST" action="/attr">
+      <div class="row">
+      <div class="col">
+        <label for="title">Title of Election:</label>
+      </div>
+      <div class="col">
+      <input type="text" name='title' placeholder='Title' />
+      <table id="vote_options">
+        <tr id='option0'>
+          <td>
+            <input type='text' name='option0' placeholder='Voting Option 1' />
+          </td></tr>
+      </table>
+      <a id="add_option" class="btn pull-left">Add Voting Option</a>
+      </div></div><!-- ends row and columns --!>
+      <input type="submit" name="submit_election" value="Submit Election Attributes">
+    </form>
+  </div>  
+  <!-- specify voting options --!>
+  {% else %}  
   <div class="row">
     <div class="col text-center">
       <form id="entry" method="POST" action="/pc">
@@ -38,45 +61,14 @@
   </div>
   {% endif %}
 
-  {% if g.wp is defined %}
-
-
-  {% endif %}
-
   <script>
-  /*
-  // kill normal function of form submission
-  //$("#entry").submit( function(event) {
-  //	  event.preventDefault();
-  //	});
 
-  $("#entry").submit( function(event) {
-  	  //event.preventDefault();
-	  var txt = $("attempt").val();
-	  $.getJSON("/_pc", { text : txt },
-			  function(received) {
-				  attmpt = received;
-				  console.log(attmpt);
-				  if (attmpt == 1) {
-					  console.log("correct password enetered");
-				  }
-  	});
+  $(document).ready(function (){
+      $("#add_option").click(function(){
+          var numRows = $('#vote_options tr').length + 1;
+          $('#vote_options tr:last').after('<tr id="option'+numRows+'"><td><input type="text" name="option'+numRows+'" placeholder="Voting Option '+numRows+'" /></td></tr>');
+      });
   });
-  */
-  /*
-  $("#attempt").submit(function(event) {
-	  var txt = $("attempt").val();
-	  $.getJSON("/_pc", { text : txt },
-			  function(received) {
-				  
-				  attmpt = received;
-				  if (attmpt) {
-					  console.log("correct password enetered");
-				  }
-
-		  })
-  });
-  */
   </script>
 
 

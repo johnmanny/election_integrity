@@ -106,11 +106,13 @@ def pc():
     #if gen_hash == pw_hash:
     if check_password_hash(pw_hash, pw_attempt):
         app.logger.debug("correct password entered: " + pw_attempt)
-        flask.g.wp = True
+        #flask.g.wp = True
+        flask.session['wp'] = True
     else:
         flask.flash('wrong password entered!')
         
-    return render_template("admin.html")
+    return flask.redirect(flask.url_for("admin"))
+    #render_template("admin.html")
 
 
 
