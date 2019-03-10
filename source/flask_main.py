@@ -10,6 +10,8 @@ from flask import request
 from flask import session
 from flask import jsonify
 from flask import url_for
+from flask import flash
+from flask import g
 import os
 import json
 import logging
@@ -25,8 +27,7 @@ APPLICATION_NAME = 'blog page'
 
 # if this were real solution, would obviously not set password here
 password = "test"
-salt = "googleyeyes"
-pw_hash = generate_password_hash(password + salt)
+pw_hash = generate_password_hash(password)
 
 
 def get_user_id():
@@ -95,21 +96,22 @@ def page_not_found(error):
 """
 #--------------------NOT WORKING - NEED TO FIX
 #password checker
-@app.route("/_pc")
+@app.route("/pc", methods=['POST'])
 def pc():
     app.logger.debug("GOT PASSWORD CHECK")
 
-    pw_attempt = flask.request.args.get("text", type=str)
-    
-    #pw_attempt = pw_attempt + salt
-    gen_hash = generate_password_hash(pw_attempt + salt)
-    if gen_hash == pw_hash:
-        print ("get it")
-        rslt = 1
+    pw_attempt = flask.request.form["password"]
+   
+    #gen_hash = generate_password_hash(pw_attempt + salt)
+    #if gen_hash == pw_hash:
+    if check_password_hash(pw_hash, pw_attempt):
+        app.logger.debug("correct password entered: " + pw_attempt)
+        flask.g.wp = True
     else:
-        rslt = 0
+        flask.flash('wrong password entered!')
         
-    return flask.jsonify(result=rslt)
+    return render_template("admin.html")
+
 
 
 """
