@@ -7,7 +7,6 @@
   <!-- jquery from cdn. (probably cached)? -->
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-
 </head>
 <body>
 
@@ -26,15 +25,18 @@
 
   {% if session.wp is defined %}
   <!-- specify topic of vote --!>
-  <div id="enterinfo">
+    <div id="enterinfo"><br />
     <h1>Enter Vote Attributes:</h1><br>
-    <form id="entry" method="POST" action="/attr">
+    <form id="entry" method="POST" action="/vote_sub">
       <div class="row">
       <div class="col">
-        <label for="title">Title of Election:</label>
-      </div>
+      <label for="title">Title of Election:</label><br />
+      <div class="row">
+      <label for="option_count">Voting Options:  </label>
+      <input type="number" name="option_count" id="option_count" min="1" max="50" value="1">
+      </div></div>
       <div class="col">
-      <input type="text" name='title' placeholder='Title' />
+      <input type="text" name='title' id='title' placeholder='Title' />
       <table id="vote_options">
         <tr id='option0'>
           <td>
@@ -65,8 +67,10 @@
 
   $(document).ready(function (){
       $("#add_option").click(function(){
-          var numRows = $('#vote_options tr').length + 1;
-          $('#vote_options tr:last').after('<tr id="option'+numRows+'"><td><input type="text" name="option'+numRows+'" placeholder="Voting Option '+numRows+'" /></td></tr>');
+          var numRows = $('#vote_options tr').length;
+	  var optionNums = numRows + 1
+          $('#vote_options tr:last').after('<tr id="option'+numRows+'"><td><input type="text" name="option'+numRows+'" placeholder="Voting Option '+optionNums+'" /></td></tr>');
+	  document.getElementById("option_count").value = optionNums;
       });
   });
   </script>

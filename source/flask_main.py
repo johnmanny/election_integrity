@@ -25,10 +25,14 @@ app.logger.setLevel(logging.DEBUG)
 app.secret_key="P3a9n71Dlb8Pkb3Qv481nk5PjnD"
 APPLICATION_NAME = 'blog page'
 
-# if this were real solution, would obviously not set password here
+# PW hash generation for admin page
 password = "test"
 pw_hash = generate_password_hash(password)
 
+##### globals for election
+title = "empty"
+voting_options = []
+vote_count = 0
 
 def get_user_id():
 	user_id = session.get('uid')
@@ -92,28 +96,39 @@ def page_not_found(error):
 			 linkback=url_for("index")), 404
 
 """
-###############################  AJAX Request Handler 
+###############################  Html Form handlers
 """
-#--------------------NOT WORKING - NEED TO FIX
 #password checker
 @app.route("/pc", methods=['POST'])
 def pc():
-    app.logger.debug("GOT PASSWORD CHECK")
+    app.logger.debug("inside password checker")
 
     pw_attempt = flask.request.form["password"]
    
-    #gen_hash = generate_password_hash(pw_attempt + salt)
-    #if gen_hash == pw_hash:
     if check_password_hash(pw_hash, pw_attempt):
         app.logger.debug("correct password entered: " + pw_attempt)
-        #flask.g.wp = True
         flask.session['wp'] = True
     else:
         flask.flash('wrong password entered!')
         
     return flask.redirect(flask.url_for("admin"))
-    #render_template("admin.html")
 
+@app.route("/vote_sub", methods=['POST'])
+def vote_sub():
+    app.logger.debug("inside vote attributes submission")
+    
+    #gather form attributes
+    title = flask.request.form["title"]
+    vote_count = flask.request.form["option_count"]
+    app.logger.debug("number of voting options: " + vote_count)
+    app.logger.debug("election title: " + title)
+    
+    for i in range(int(vote_count)):
+        option_num = "option" + str(i)
+        voting_options.append(flask.request.form[option_num])
+        app.logger.debug(voting_options[i])
+
+    return render_template("index.html")
 
 
 """
