@@ -32,7 +32,7 @@ password = "test"
 pw_hash = generate_password_hash(password)
 
 ##### globals for election
-title = "empty"
+title = "no vote"
 voting_options = []
 vote_count = 0
 
@@ -54,10 +54,15 @@ def index():
 	voterid = get_user_id()
 	app.logger.debug(flask.request.user_agent.string)
 	app.logger.debug("LEAVING INDEX")
+
 	return render_template('index.html', voterid=voterid)
 
 @app.route("/vote")
 def vote():
+	# set session items for displaying
+	g.vote_title = title
+	g.vote_options = voting_options
+	g.vote_count = vote_count
 	voterid = get_user_id()
 	if 'publickey' not in session:
 		return render_template('vote_noregister.html', voterid=voterid)

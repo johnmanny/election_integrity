@@ -85,10 +85,12 @@
     <p class="text-center">Your Public Key:<br />{{ publickey }}</p>
     <p class="text-center">Your Vote:
       <div class="flex-container">
+        {% for option in g.vote_options %}
         <div class="wrapper">
-          <input id="vote-0" name="votes" type="radio" value="0">
-          <label for="vote-0"> 0</label>
+          <input id="vote{{ loop.index }}" name="votes" type="radio" value="{{ option }}">
+          <label for="vote{{ loop.index }}"> {{ option }} </label>
         </div>
+        {% endfor %}
         <div class="wrapper">
           <input id="vote-1" name="votes" type="radio" value="1">
           <label for="vote-1"> 1</label>
