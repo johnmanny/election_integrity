@@ -82,54 +82,10 @@
     <p class="text-center">
       <a href="index">HOME</a>
     </p>
-    <p class="text-center">Your Public Key:<br />{{ publickey }}</p>
-    <p class="text-center">Your Vote:
-      <div class="flex-container">
-        <div class="wrapper">
-          <input id="vote-0" name="votes" type="radio" value="0">
-          <label for="vote-0"> 0</label>
-        </div>
-        <div class="wrapper">
-          <input id="vote-1" name="votes" type="radio" value="1">
-          <label for="vote-1"> 1</label>
-        </div>
-      </div>
-      <div class="flex-container" id="sliders"></div>
-      <script type="text/javascript">
-        for (i = 1; i <= 5; i++) {
-          $('#sliders').append(
-            "<div class=\"text-center\">Encryption Coefficient "
-            + i
-            + ":<br><input type=\"range\"  min=\"1\" max={{maxval}} value=\""
-            + (Math.floor(Math.random() * {{maxval}}) + 1)
-            + "\" link-to=\"text_box_name"
-            + i
-            + "\"><br><input type=\"text\" id=\"text_box_name"
-            + i
-            + "\"><br><br></div>"
-          )
-        }
-      </script>
-      <script class="cssdeck" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js">
-      </script>
-      <script class="cssdeck">
-        $(function() {
-          $('input').filter( function(){return this.type == 'range' } ).each(function(){  
-            var $slider = $(this),
-            $text_box = $('#'+$(this).attr('link-to'));
-
-            $text_box.val(this.value);
-
-            $slider.change(function(){
-              $text_box.val(this.value);
-            });
-
-            $text_box.change(function(){
-              $slider.val($text_box.val());
-            });
-          });
-        });
-      </script>
+    <p class="text-center">
+      You must register before voting.
+      <br>
+      <a href="/register">REGISTER HERE</a>
     </p>
     <p class="text-center">Your ID:<br />{{ voterid }}</p><br />
     <!-- flash flask messages for errors/notifications -->

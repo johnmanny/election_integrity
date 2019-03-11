@@ -12,6 +12,8 @@ from flask import jsonify
 from flask import url_for
 from flask import flash
 from flask import g
+from flask import Markup
+from flask import redirect
 import os
 import json
 import logging
@@ -57,7 +59,14 @@ def index():
 @app.route("/vote")
 def vote():
 	voterid = get_user_id()
-	return render_template('vote.html', voterid=voterid)
+	if 'publickey' not in session:
+		return render_template('vote_noregister.html', voterid=voterid)
+	pub = Markup('<p class="text-center">'\
+	+ '<textarea cols="63" rows="6" readonly style="resize:none; font-family:monospace">' \
+	+ session['publickey'].decode("ascii") \
+	+ '</textarea>' \
+	+ '</p>')
+	return render_template('vote.html', voterid=voterid, publickey=pub, maxval=10000)
 
 @app.route("/register")
 def register():
@@ -73,8 +82,14 @@ def generate():
 	session['privatekey'] = privateKey
 	session['publickey'] = publicKey
 	
-	newKey = RSA.importKey(privateKey)
-	return jsonify([publicKey.decode("utf-8"), privateKey.decode("utf-8")]);
+	# newKey = RSA.importKey(privateKey)
+	return '<p class="text-center">'\
+		+ '<textarea cols="63" rows="21" readonly style="resize:none; font-family:monospace">' \
+		+ publicKey.decode("ascii") \
+		+ '\n' \
+		+ privateKey.decode("ascii") \
+		+ '</textarea>' \
+		+ '</p>'
 
 @app.route("/verify")
 def verify():

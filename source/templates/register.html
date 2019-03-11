@@ -14,6 +14,9 @@
       <a href="index">HOME</a>
     </p>
     <p class="text-center">
+      <a href="vote">VOTE HERE</a>
+    </p>
+    <p class="text-center">
       <button type="button" onclick="loadDoc()">Generate Key</button>
       <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
       <script type="text/javascript">
@@ -24,13 +27,14 @@
                   data: JSON.stringify($(this).attr("id")),
                   contentType: 'application/json;charset=UTF-8',
                   success: function(data) {
-                      $('.voterkey').text(data)
+                      $('.voterkey').html(data)
                   }
               })
           };
       </script>
-      <div class="voterkey">
-      </div>
+      
+        <div class="voterkey"></div>
+      </p>
     </p>
     <p class="text-center">Your ID: {{ voterid }}</p><br />
     <!-- flash flask messages for errors/notifications -->
