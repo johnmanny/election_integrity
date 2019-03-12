@@ -59,7 +59,7 @@ def get_user_id():
 	app.logger.debug(flask.session['uid']);
 	return user_id
 
-def get_or_add_uuid(uuid):
+def get_or_add_uuid(voterid):
 	user = db.session.query(User).filter_by(uuid=voterid).first()
 	if not user:
 		user = User(uuid=voterid)
