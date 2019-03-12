@@ -114,7 +114,6 @@ def generate():
 		db.session.add(user)
 	else:
 		user.pubkey = publicKey.decode("ascii")
-		db.session.merge(user)
 	db.session.commit()
 	# newKey = RSA.importKey(privateKey)
 	return '<p class="text-center">'\
