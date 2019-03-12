@@ -36,12 +36,12 @@
       <div class="col">
       <input type="text" name='title' id='title' placeholder='Title' />
       <table id="vote_options">
-        <tr id='option'>
+        <tr id='option0'>
           <td>
             <input type='text' name='option0' value='1' />
           </td>
         </tr>
-        <tr id='option'>
+        <tr id='option1'>
           <td>
             <input type='text' name='option1' value='2' />
           </td>
@@ -73,7 +73,7 @@
       $("#add_option").click(function(){
           var numRows = $('#vote_options tr').length;
 	  var optionNums = numRows + 1
-          $('#vote_options tr:last').after('<tr id="option"><td><input type="text" name="option'+numRows+'" value="'+optionNums+'" /></td></tr>');
+          $('#vote_options tr:last').after('<tr id="option'+optionnums+'"><td><input type="text" name="option" value="'+optionNums+'" /></td></tr>');
 	  document.getElementById("option_count").value = optionNums;
       });
   });
