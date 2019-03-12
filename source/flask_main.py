@@ -57,6 +57,7 @@ class Settings(db.Model):
 
 
 db.create_all()
+db.session.query(Settings).delete() 
 db.session.add(Settings(title="Untitled Vote"))
 db.session.commit()
 
