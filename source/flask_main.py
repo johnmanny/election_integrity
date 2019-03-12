@@ -68,7 +68,7 @@ def index():
 	app.logger.debug("ENTERING INDEX")
 	voterid = get_user_id()
 	user = User.query.filter_by(uuid=voterid)
-	if not user:
+	if user.scalar() is None:
 		user = User(uuid=voterid)
 		db.session.add(user);
 		db.session.commit();
@@ -109,7 +109,7 @@ def generate():
 	session['publickey'] = publicKey
 
 	user = User.query.filter_by(uuid=session['uid'])
-	if not user:
+	if user.scalar() is None:
 		user = User(uuid=voterid, pubkey=publicKey.decode("ascii"))
 		db.session.add(user)
 	else:
