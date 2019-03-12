@@ -14,73 +14,71 @@
     <h1 class="text-center">Voting administration page</h1>
     <!-- flash flask messages for errors/notifications -->
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
+    {% if messages %}
+    <ul class=flashes>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
     {% endwith %}
 
-  {% if session.wp is defined %}
-  <!-- specify topic of vote -->
+    {% if session.wp is defined %}
+    <!-- specify topic of vote -->
     <div id="enterinfo"><br />
-    <h1>Enter Vote Attributes:</h1><br>
-    <form id="entry" method="POST" action="/vote_sub">
-      <div class="row">
-      <div class="col">
-      <label for="title">Title of Election:</label><br />
-      <div class="row">
-      </div></div>
-      <div class="col">
-      <input type="text" name='title' id='title' placeholder='Title' />
-      <table id="vote_options">
-        <tr id='option0'>
-          <td>
-            <input type='text' name='option0' value='1' />
-          </td>
-        </tr>
-        <tr id='option1'>
-          <td>
-            <input type='text' name='option1' value='2' />
-          </td>
-        </tr>
-      </table>
-      <a id="add_option" class="btn pull-left">Add Voting Option</a>
-      </div></div><!-- ends row and columns -->
-      <input type="submit" name="submit_election" value="Submit Election Attributes">
-    </form>
-  </div>  
-  <!-- specify voting options -->
-  {% else %}  
-  <div class="row">
-    <div class="col text-center">
-      <form id="entry" method="POST" action="/pc">
-        <label for="pass">Password:</label>
-        <input type="password" id="pass" name="password"
-           minlength="1" required>
-        <input type="submit" value="Submit">
+      <h1>Enter Vote Attributes:</h1><br>
+      <form id="entry" method="POST" action="/vote_sub">
+        <div class="row">
+          <div class="col">
+            <label for="title">Title of Election:</label><br />
+            <div class="row">
+            </div></div>
+            <div class="col">
+              <input type="text" name='title' id='title' placeholder='Title' />
+              <table id="vote_options">
+                <tr id='option'>
+                  <td>
+                    <input type='text' name='option' value='1' />
+                  </td>
+                </tr>
+                <tr id='option'>
+                  <td>
+                    <input type='text' name='option' value='2' />
+                  </td>
+                </tr>
+              </table>
+              <a id="add_option" class="btn pull-left">Add Voting Option</a>
+            </div></div><!-- ends row and columns -->
+            <input type="submit" name="submit_election" value="Submit Election Attributes">
+          </form>
+        </div>  
+        <!-- specify voting options -->
+        {% else %}  
+        <div class="row">
+          <div class="col text-center">
+            <form id="entry" method="POST" action="/pc">
+              <label for="pass">Password:</label>
+              <input type="password" id="pass" name="password"
+              minlength="1" required>
+              <input type="submit" value="Submit">
 
-      </form>
-    </div>
-  </div>
-  {% endif %}
+            </form>
+          </div>
+        </div>
+        {% endif %}
 
-  <script>
-
-  $(document).ready(function (){
-      $("#add_option").click(function(){
-          var numRows = $('#vote_options tr').length;
-	  var optionNums = numRows + 1
-          $('#vote_options tr:last').after('<tr id="option'+optionnums+'"><td><input type="text" name="option" value="'+optionNums+'" /></td></tr>');
-	  document.getElementById("option_count").value = optionNums;
-      });
-  });
-  </script>
+        <script>
+          $(document).ready(function (){
+            $("#add_option").click(function(){
+              var numRows = $('#vote_options tr').length;
+              var optionNums = numRows + 1
+              $('#vote_options tr:last').after('<tr id="option"><td><input type="text" name="option" value="'+optionNums+'" /></td></tr>');
+            });
+          });
+        </script>
 
 
-  </div>  <!-- container (for bootstrap) -->
+      </div>  <!-- container (for bootstrap) -->
 
-</body>
-</html>
+    </body>
+    </html>
