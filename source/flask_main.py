@@ -104,7 +104,7 @@ def vote():
 	+ session['publickey'].decode("ascii") \
 	+ '</textarea>' \
 	+ '</p>')
-	return render_template('vote.html', voterid=voterid, publickey=pub, maxval=10000)
+	return render_template('vote.html', voterid=voterid, votes=VoteOptions.query.all(), publickey=pub, maxval=10000)
 
 @app.route("/register")
 def register():
