@@ -178,7 +178,7 @@ def vote_sub():
     app.logger.debug("election title: " + title)
    
     voting_options = request.form.getlist("option")
-    VoteOptions.query().delete();
+    db.session.query(VoteOptions).delete()
     for option in voting_options:
         entry = VoteOptions(name=option)
         db.session.add(entry)
