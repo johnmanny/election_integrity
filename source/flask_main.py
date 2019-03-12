@@ -14,6 +14,9 @@ from flask import flash
 from flask import g
 from flask import Markup
 from flask import redirect
+from flask_sqlalchemy import SQLAlchemy
+
+
 import os
 import json
 import logging
@@ -21,6 +24,8 @@ import uuid
 from Crypto.PublicKey import RSA
 
 app = flask.Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/DATABASE'
+db = SQLAlchemy(app)
 # sets debug level for app
 app.debug=True
 app.logger.setLevel(logging.DEBUG)
