@@ -133,6 +133,8 @@ def pc():
         
     return flask.redirect(flask.url_for("admin"))
 
+## submits the election attributes entered from administration page
+# currently there is minimal error checking
 @app.route("/vote_sub", methods=['POST'])
 def vote_sub():
     app.logger.debug("inside vote attributes submission")
@@ -142,12 +144,13 @@ def vote_sub():
     vote_count = flask.request.form["option_count"]
     app.logger.debug("number of voting options: " + vote_count)
     app.logger.debug("election title: " + title)
-    
+   
+    voting_options.clear()
     for i in range(int(vote_count)):
         option_num = "option" + str(i)
         voting_options.append(flask.request.form[option_num])
         app.logger.debug(voting_options[i])
-
+   
     return render_template("index.html")
 
 
