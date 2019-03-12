@@ -41,6 +41,12 @@ title = "no vote"
 voting_options = []
 vote_count = 0
 
+class User(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	uuid = db.Column(db.String(80), unique=True, nullable=False)
+	def __repr__(self):
+		return '<User %r>' % self.uuid
+
 def get_user_id():
 	user_id = session.get('uid')
 	if not user_id:
@@ -57,6 +63,10 @@ def get_user_id():
 def index():
 	app.logger.debug("ENTERING INDEX")
 	voterid = get_user_id()
+	user = User(uuid = voterid);
+	db.session.add(user);
+	db.session.commit();
+	app.logger.debug(User.query.all())
 	app.logger.debug(flask.request.user_agent.string)
 	app.logger.debug("LEAVING INDEX")
 
