@@ -176,7 +176,6 @@ def vote_sub():
     
     #gather form attributes
     title = flask.request.form["title"]
-    vote_count = flask.request.form["option_count"]
     app.logger.debug("number of voting options: " + vote_count)
     app.logger.debug("election title: " + title)
    
