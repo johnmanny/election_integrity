@@ -44,8 +44,9 @@ vote_count = 0
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	uuid = db.Column(db.String(80), unique=True, nullable=False)
+	pubkey = db.Column()
 	def __repr__(self):
-		return '<User %r>' % self.uuid
+		return '<User %r %r>' % (self.uuid, self.pubkey)
 
 db.create_all()
 db.session.commit()
@@ -66,7 +67,10 @@ def get_user_id():
 def index():
 	app.logger.debug("ENTERING INDEX")
 	voterid = get_user_id()
-	user = User(uuid = voterid);
+	user = db.query.filter_by(uuid=voterid)
+	if not user:
+		user = User(uuid=voterid, pubkey=None)
+
 	db.session.add(user);
 	db.session.commit();
 	app.logger.debug(User.query.all())
@@ -104,7 +108,11 @@ def generate():
 	publicKey = keyObj.publickey().exportKey()
 	session['privatekey'] = privateKey
 	session['publickey'] = publicKey
-	
+
+	user = db.query.filter_by(uuid=session['uid'])
+	if not user:
+		user = User(uuid=voterid, pubkey=None)
+	user.pubkey = publicKey.decode("ascii")
 	# newKey = RSA.importKey(privateKey)
 	return '<p class="text-center">'\
 		+ '<textarea cols="63" rows="21" readonly style="resize:none; font-family:monospace">' \
