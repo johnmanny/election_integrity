@@ -44,7 +44,7 @@ vote_count = 0
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	uuid = db.Column(db.String(80), unique=True, nullable=False)
-	pubkey = db.Column()
+	pubkey = db.Column(db.String(300), unique=True, nullable=True)
 	def __repr__(self):
 		return '<User %r %r>' % (self.uuid, self.pubkey)
 
