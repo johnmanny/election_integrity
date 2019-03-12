@@ -60,7 +60,7 @@ def get_user_id():
 	return user_id
 
 def get_or_add_uuid(voterid):
-	user = db.session.query(User).filter_by(uuid=voterid).first()
+	user = db.session.query(User).filter_by(uuid=str(voterid)).first()
 	if not user:
 		user = User(uuid=voterid)
 		db.session.add(user);
