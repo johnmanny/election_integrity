@@ -110,6 +110,10 @@ def generate():
 	publicKey = keyObj.publickey().exportKey()
 	session['privatekey'] = privateKey
 	session['publickey'] = publicKey
+	voterid = get_user_id()
+	user = get_or_add_uuid(voterid)
+	user.pubkey = publicKey.decode("ascii")
+	db.session.commit();
 	# newKey = RSA.importKey(privateKey)
 	return '<p class="text-center">'\
 		+ '<textarea cols="63" rows="21" readonly style="resize:none; font-family:monospace">' \
