@@ -24,7 +24,7 @@ import uuid
 from Crypto.PublicKey import RSA
 
 app = flask.Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/DATABASE'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 # sets debug level for app
 app.debug=True
