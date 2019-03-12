@@ -47,6 +47,9 @@ class User(db.Model):
 	def __repr__(self):
 		return '<User %r>' % self.uuid
 
+db.create_all()
+db.session.commit()
+
 def get_user_id():
 	user_id = session.get('uid')
 	if not user_id:
