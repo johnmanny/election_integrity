@@ -59,6 +59,12 @@ def get_user_id():
 	app.logger.debug(flask.session['uid']);
 	return user_id
 
+def get_or_add_uuid(uuid):
+	user = db.session.query(User).filter_by(uuid=voterid).first()
+	if not user:
+		user = User(uuid=voterid)
+		db.session.add(user);
+	return user
 """
 ###############################  Pages (routed from URLs)
 """
@@ -67,11 +73,8 @@ def get_user_id():
 def index():
 	app.logger.debug("ENTERING INDEX")
 	voterid = get_user_id()
-	user = User.query.filter_by(uuid=voterid)
-	if user.scalar() is None:
-		user = User(uuid=voterid)
-		db.session.add(user);
-		db.session.commit();
+	user = get_or_add_uuid(voterid)
+	db.session.commit();
 	app.logger.debug(User.query.all())
 	app.logger.debug(flask.request.user_agent.string)
 	app.logger.debug("LEAVING INDEX")
@@ -107,14 +110,6 @@ def generate():
 	publicKey = keyObj.publickey().exportKey()
 	session['privatekey'] = privateKey
 	session['publickey'] = publicKey
-
-	user = User.query.filter_by(uuid=session['uid'])
-	if user.scalar() is None:
-		user = User(uuid=voterid, pubkey=publicKey.decode("ascii"))
-		db.session.add(user)
-	else:
-		user.pubkey = publicKey.decode("ascii")
-	db.session.commit()
 	# newKey = RSA.importKey(privateKey)
 	return '<p class="text-center">'\
 		+ '<textarea cols="63" rows="21" readonly style="resize:none; font-family:monospace">' \
