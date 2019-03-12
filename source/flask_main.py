@@ -94,7 +94,6 @@ def vote():
 	# set session items for displaying
 	g.vote_title = title
 	g.vote_options = voting_options
-	g.vote_count = vote_count
 	voterid = get_user_id()
 	if 'publickey' not in session:
 		return render_template('vote_noregister.html', voterid=voterid)
@@ -176,7 +175,6 @@ def vote_sub():
     
     #gather form attributes
     title = flask.request.form["title"]
-    app.logger.debug("number of voting options: " + vote_count)
     app.logger.debug("election title: " + title)
    
     voting_options = request.form.getlist("option")
