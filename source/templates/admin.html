@@ -24,7 +24,7 @@
     {% endwith %}
 
   {% if session.wp is defined %}
-  <!-- specify topic of vote --!>
+  <!-- specify topic of vote -->
     <div id="enterinfo"><br />
     <h1>Enter Vote Attributes:</h1><br>
     <form id="entry" method="POST" action="/vote_sub">
@@ -32,23 +32,27 @@
       <div class="col">
       <label for="title">Title of Election:</label><br />
       <div class="row">
-      <label for="option_count">Voting Options:  </label>
-      <input type="number" name="option_count" id="option_count" min="1" max="50" value="1">
       </div></div>
       <div class="col">
       <input type="text" name='title' id='title' placeholder='Title' />
       <table id="vote_options">
-        <tr id='option0'>
+        <tr id='option'>
           <td>
-            <input type='text' name='option0' placeholder='Voting Option 1' />
-          </td></tr>
+            <input type='text' name='option0' value='1' />
+          </td>
+        </tr>
+        <tr id='option'>
+          <td>
+            <input type='text' name='option1' value='2' />
+          </td>
+        </tr>
       </table>
       <a id="add_option" class="btn pull-left">Add Voting Option</a>
-      </div></div><!-- ends row and columns --!>
+      </div></div><!-- ends row and columns -->
       <input type="submit" name="submit_election" value="Submit Election Attributes">
     </form>
   </div>  
-  <!-- specify voting options --!>
+  <!-- specify voting options -->
   {% else %}  
   <div class="row">
     <div class="col text-center">
@@ -69,7 +73,7 @@
       $("#add_option").click(function(){
           var numRows = $('#vote_options tr').length;
 	  var optionNums = numRows + 1
-          $('#vote_options tr:last').after('<tr id="option'+numRows+'"><td><input type="text" name="option'+numRows+'" placeholder="Voting Option '+optionNums+'" /></td></tr>');
+          $('#vote_options tr:last').after('<tr id="option"><td><input type="text" name="option'+numRows+'" value="'+optionNums+'" /></td></tr>');
 	  document.getElementById("option_count").value = optionNums;
       });
   });

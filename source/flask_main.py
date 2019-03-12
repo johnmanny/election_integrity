@@ -39,7 +39,6 @@ pw_hash = generate_password_hash(password)
 ##### globals for election
 title = "no vote"
 voting_options = []
-vote_count = 0
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -47,6 +46,15 @@ class User(db.Model):
 	pubkey = db.Column(db.String(300), unique=True, nullable=True)
 	def __repr__(self):
 		return '<User %r %r>' % (self.uuid, self.pubkey)
+
+class VoteOptions(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(80), unique=True, nullable=False)
+
+class Settings(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(80), unique=True, nullable=False)
+
 
 db.create_all()
 db.session.commit()
@@ -172,11 +180,12 @@ def vote_sub():
     app.logger.debug("number of voting options: " + vote_count)
     app.logger.debug("election title: " + title)
    
-    voting_options.clear()
-    for i in range(int(vote_count)):
-        option_num = "option" + str(i)
-        voting_options.append(flask.request.form[option_num])
-        app.logger.debug(voting_options[i])
+    voting_options = request.form.getlist("option")
+    VoteOptions.query().delete();
+    for option in voting_options:
+    	entry = VoteOptions(name=option)
+		db.session.add(entry);
+	db.session.commit();
    
     return render_template("index.html")
 
