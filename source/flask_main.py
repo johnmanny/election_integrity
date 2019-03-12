@@ -69,7 +69,7 @@ def index():
 	voterid = get_user_id()
 	user = User.query.filter_by(uuid=voterid)
 	if not user:
-		user = User(uuid=voterid, pubkey=None)
+		user = User(uuid=voterid)
 		db.session.add(user);
 		db.session.commit();
 	app.logger.debug(User.query.all())
