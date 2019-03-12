@@ -88,7 +88,7 @@
         {% for option in votes %}
         <div class="wrapper">
           <input id="vote{{ loop.index }}" name="votes" type="radio" value="{{ option }}">
-          <label for="vote{{ loop.index }}"> {{ option }} </label>
+          <label for="vote{{ loop.index }}"> {{ option.name }} </label>
         </div>
         {% endfor %}
       </div>
