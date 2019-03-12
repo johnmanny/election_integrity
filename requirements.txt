@@ -6,3 +6,4 @@ MarkupSafe==1.1.0
 Werkzeug==0.14.1
 pycrypto==2.5
 Flask_SQLAlchemy==2.3.2
+psycopg2==2.7.7
