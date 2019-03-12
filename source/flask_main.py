@@ -57,6 +57,7 @@ class Settings(db.Model):
 
 
 db.create_all()
+settings = Settings(title="Untitled Vote")
 db.session.commit()
 
 def get_user_id():
@@ -180,9 +181,11 @@ def vote_sub():
     voting_options = request.form.getlist("option")
     app.logger.debug("vote options: " + str(voting_options))
     db.session.query(VoteOptions).delete()
+    db.session.query(Settings).delete()
     for option in voting_options:
         entry = VoteOptions(name=option)
         db.session.add(entry)
+    settings = Settings(title=title)
     db.session.commit()
    
     return render_template("index.html")
