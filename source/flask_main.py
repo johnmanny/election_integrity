@@ -184,8 +184,8 @@ def vote_sub():
     VoteOptions.query().delete();
     for option in voting_options:
     	entry = VoteOptions(name=option)
-		db.session.add(entry);
-	db.session.commit();
+		db.session.add(entry)
+	db.session.commit()
    
     return render_template("index.html")
 
