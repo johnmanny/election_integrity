@@ -34,8 +34,19 @@
             <div class="row">
             </div></div>
             <div class="col">
-              <input type="text" name='title' id='title' placeholder='Title' />
+              <input type="text" name='title' id='title' value="{{ g.vote_title }}" />
               <table id="vote_options">
+                {% for option in g.vote_options %}
+                 <tr id='option'>
+                  <td>
+                    <input type='text' name='option' value="{{ option.name }}"/>
+                  </td>
+                  <td>
+                      <input type="button" value="Delete" />
+                  </td>
+                </tr>
+                {% endfor %}
+                <!--
                 <tr id='option'>
                   <td>
                     <input type='text' name='option' value='1' />
@@ -46,8 +57,11 @@
                     <input type='text' name='option' value='2' />
                   </td>
                 </tr>
+                -->
               </table>
-              <a id="add_option" class="btn pull-left">Add Voting Option</a>
+              <p>
+                  <input type="button" value="Insert row">
+              </p>
             </div></div><!-- ends row and columns -->
             <input type="submit" name="submit_election" value="Submit Election Attributes">
           </form>
@@ -68,12 +82,11 @@
         {% endif %}
 
         <script>
-          $(document).ready(function (){
-            $("#add_option").click(function(){
-              var numRows = $('#vote_options tr').length;
-              var optionNums = numRows + 1
-              $('#vote_options tr:last').after('<tr id="option"><td><input type="text" name="option" value="'+optionNums+'" /></td></tr>');
-            });
+          $('#vote_options').on('click', 'input[type="button"]', function () {
+              $(this).closest('tr').remove();
+          })
+          $('p input[type="button"]').click(function () {
+              $('#vote_options').append('<tr><td><input type="text" name="option" /></td><td><input type="button" value="Delete" /></td></tr>')
           });
         </script>
 
