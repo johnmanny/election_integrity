@@ -41,15 +41,16 @@
         encrypted values which are transmitted to the respective vote counters.<p></ b>
 
         <h5><small>THE MATH</small></h5>
-        <p>A polynomial with a degree equal the number of vote counters minus one is then used with
-        the voter-defined coefficients-per-term to calculate each specific vote counters value. An
-        election-wide prime modulus is then used to encrypt each value before sending it off to its
+        <p>A polynomial with a degree equal to the number of vote counters minus one is then used with
+        the voter-defined coefficients to calculate each specific vote counters value. An
+        election-wide prime modulus is then used with this value before sending it off to its
         respective vote counter.</p></ b>
 
         <p>To tally up votes, each vote counter's sum of encrypted values are then used as points for
-        an Interpolating Lagrange Polynomial in order to find the constant term. Once it's found,
+        an Interpolating Lagrange Polynomial in order to find the constant term. Once it's found, and 
+        after the prime modulus is used with the constant term,
         the number of maximum voters allowed (defined at the beginning of the election) is used to
-        find the vote tally for each option when expressing the constant term as a linear combination
+        find the vote tally for each option when expressing the resulting value as a linear combination
         of the maximum voter count.</p></ b>
 
     </div>

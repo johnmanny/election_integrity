@@ -1,6 +1,7 @@
 # Authors: Taylor Santos, John Nemeth
-# Description:
-# Sources: 
+# Description: This hosts the webpage used for the election integrity demonstration. 
+#		The entire project is currently setup to be hosted on heroku.
+# Sources: python utility manuals
 
 from werkzeug.security import generate_password_hash, \
         check_password_hash

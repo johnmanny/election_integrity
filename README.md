@@ -22,9 +22,10 @@ respective vote counter.
 
 ### Voting results
 To tally up votes, each vote counter's sum of encrypted values are used as points for
-an Interpolating Lagrange Polynomial in order to find the constant term. Once it's found, 
+an Interpolating Lagrange Polynomial in order to find the constant term. Once it's found,
+and after the prime modulus is used with this constant term, 
 the number of maximum voters allowed (defined at the beginning of the election) is used to
-find the vote tally for each election option when expressing the constant term as a linear 
+find the vote tally for each election option when expressing the resulting value as a linear 
 combination of the maximum voter count.
 
 ## Creating a vote
