@@ -73,6 +73,27 @@
     box-shadow: 0 0 0 3px #ffbf47;  
     outline: 3px solid transparent; /* For Windows high contrast mode. */
   }
+
+  .button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  .button:disabled,
+  .button[disabled]{
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+  }
 </style>
 </head>
 <body>
@@ -83,66 +104,89 @@
     </p>
     <p class="text-center">Your Public Key:<br />{{ g.publickey }}</p>
     <h2 class="text-center">{{ g.vote_title }}:</h2>
-    <div class="flex-container">
-      <div style="display: inline-block; text-align: left;">
-        {% for option in g.vote_options %}
-        <div class="wrapper">
-          <input id="vote{{ loop.index }}" name="votes" type="radio" value="{{ option }}">
-          <label for="vote{{ loop.index }}"> {{ option.name }} </label>
-
+    <form id="entry" method="POST" action="/vote_send">
+      <div class="flex-container">
+        <div style="display: inline-block; text-align: left;">
+          {% for option in g.vote_options %}
+          <div class="wrapper">
+            <input id="vote{{ loop.index }}" name="votes" type="radio" value="{{ option.index }}">
+            <label for="vote{{ loop.index }}"> {{ option.name }} </label>
+          </div>
+          <br />
+          {% endfor %}
         </div>
-        <br />
-        {% endfor %}
       </div>
-    </div>
-    <div class="flex-container" id="sliders"></div>
-    <script type="text/javascript">
-      for (i = 1; i <= 5; i++) {
-        $('#sliders').append(
-          "<div class=\"text-center\">Encryption Coefficient "
-          + i
-          + ":<br><input type=\"range\"  min=\"1\" max={{ g.maxval }} value=\""
-          + (Math.floor(Math.random() * {{ g.maxval }}) + 1)
-          + "\" link-to=\"text_box_name"
-          + i
-          + "\"><br><input type=\"text\" id=\"text_box_name"
-          + i
-          + "\"><br><br></div>"
-        )
-      }
-    </script>
-    <script class="cssdeck" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js">
-    </script>
-    <script class="cssdeck">
-      $(function() {
-        $('input').filter( function(){return this.type == 'range' } ).each(function(){  
-          var $slider = $(this),
-          $text_box = $('#'+$(this).attr('link-to'));
+      <br /><br />
+      <h2 class="text-center">Choose {{ g.num_counters }} random values:</h2>
+      <div class="flex-container" id="sliders"></div>
+      <script type="text/javascript">
+        for (i = 1; i <= "{{ g.num_counters }}"; i++) {
+          $('#sliders').append(
+            "<div class=\"text-center\">Encryption Coefficient "
+            + i
+            + ":<br><input name=\"coefficients\" type=\"range\"  min=\"1\" max={{ g.maxval }} value=\""
+            + (Math.floor(Math.random() * {{ g.maxval }}) + 1)
+            + "\" link-to=\"text_box_name"
+            + i
+            + "\"><br><input type=\"number\" min=\"1\" max={{ g.maxval }} id=\"text_box_name"
+            + i
+            + "\"><br><br></div>"
+            )
+          }
+        </script>
+        <div class="text-center">
+          <input class="button" type="submit" name="submit_vote" value="Submit Vote" disabled>
+        </div>
+      </form>
+      <script class="cssdeck" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js">
+      </script>
+      <script class="cssdeck">
+        $(function() {
+          $('input').filter( function(){return this.type == 'range' } ).each(function(){  
+            var $slider = $(this),
+            $text_box = $('#'+$(this).attr('link-to'));
 
-          $text_box.val(this.value);
-
-          $slider.change(function(){
             $text_box.val(this.value);
-          });
 
-          $text_box.change(function(){
-            $slider.val($text_box.val());
+            $slider.change(function(){
+              $text_box.val(this.value);
+            });
+
+            $text_box.change(function(){
+              $slider.val($text_box.val());
+            });
           });
         });
-      });
-    </script>
-    <p class="text-center">Your ID:<br />{{ g.voterid }}</p><br />
-    <!-- flash flask messages for errors/notifications -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class=flashes>
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+        $(function (){
+          $('input').filter( function(){return this.type == 'radio' } ).each(function(){  
+            var $radio = $(this);
+            $radio.change(function(){
+              document.getElementsByName("submit_vote")[0].disabled = false;
+            });
+          });
+        });
+        window.onbeforeunload = function(e){
+          e = e || window.event;
+          var message = 'Your vote has not yet been submitted. Are you sure you want to leave?';
+          if (e) 
+          {
+            e.returnValue = message;
+          }
+          return message;
+        }        
+          </script>
+          <p class="text-center">Your ID:<br />{{ g.voterid }}</p><br />
+          <!-- flash flask messages for errors/notifications -->
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% endwith %}
 
-  </div>  <!-- container (for bootstrap) -->
-</body>
-</html>
+        </div>  <!-- container (for bootstrap) -->
+      </body>
+      </html>

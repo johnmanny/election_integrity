@@ -36,7 +36,7 @@
         <div class="voterkey"></div>
       </p>
     </p>
-    <p class="text-center">Your ID: {{ voterid }}</p><br />
+    <p class="text-center">Your ID: {{ g.voterid }}</p><br />
     <!-- flash flask messages for errors/notifications -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}

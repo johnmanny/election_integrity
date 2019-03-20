@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="en">
+<head>
+  <title>{{ g.vote_title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css"/>
+  <!-- jquery from cdn. (probably cached)? -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <style>
+  /* Credit to:
+  https://webdesign.tutsplus.com/tutorials/how-to-make-custom-accessible-checkboxes-and-radio-buttons--cms-32074 
+  for Radio Button style */
+  /*style wrapper to give some space*/
+
+  .button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+
+  .button:disabled,
+  .button[disabled]{
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+  }
+
+  table {
+    border-collapse: collapse;
+    display: inline-block;
+    text-align: left;
+  }
+
+  tr {
+    border-bottom: 1px solid #ccc;
+  }
+  th {
+    border-bottom: 1px solid #ccc; 
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Election Integrity Voting Page</h1>
+    <p class="text-center">
+      <a href="index">HOME</a>
+    </p>
+    <p class="text-center">Your Public Key:<br />{{ g.publickey }}</p>
+    <h2 class="text-center">Confirm Your Vote</h2>
+    <p class="text-center">Your encrypted vote:<br>
+    [
+    {% for value in g.values %}
+       {{ value }}
+       {% if not loop.last %}
+      ,
+      {% endif %}
+    {% endfor %}
+    ]
+  </p>
+    <form id="entry" method="POST" action="/vote_confirm">
+    <div class="text-center">
+      <input class="button" type="submit" name="submit_vote" value="Confirm">
+    </div>
+    </form>
+    <br />
+    <h3 class="text-center">How your vote was encrypted:</h3>
+    <p class="text-center">You voted for <strong>{{ g.vote_name }}</strong>.</p>
+    <p class="text-center">{{ g.vote_name }} has index <strong>{{ g.vote_index }}</strong>:<br>
+      (
+      {% for option in g.vote_options %}
+      {% if option.name == g.vote_name %}
+      <strong>{{ option.name }}</strong>
+      {% else %}
+      {{ option.name }}
+      {% endif %}
+      {% if not loop.last %}
+      ,
+      {% endif %}
+      {% endfor %}
+      )
+    </p>
+    <p class="text-center">
+      {{ g.vote_index }} is encoded as <strong>{{ g.vote_value }}</strong>:<br>
+      Encoding = {{ g.max_voters }}^index (where {{ g.max_voters }} = maximum number of voters)
+    </p>
+    <p class="text-center">
+      Your chosen coefficients:<br>
+      {% for option in g.coefficients %}
+      <strong>{{ option }}</strong>
+      {% if not loop.last %}
+      ,
+      {% endif %}
+      {% endfor %}
+    </p>
+    <p class="text-center">
+      Construct a polynomial of degree {{ g.num_counters }} using these coefficients, with your encoded vote as the constant term:<br>
+
+      P(x) = <strong>{{ g.vote_value }}</strong> + 
+      {% for option in g.coefficients %}
+      <strong>{{ option }}</strong>x{% if not loop.first %}^{{ loop.index }}{% endif %}
+      {% if not loop.last %}
+      +
+      {% endif %}
+      {% endfor %}
+    </p>
+    <p class="text-center">
+      This vote is using a prime modulus of <strong>{{ g.prime_modulo }}</strong>.
+    </p>
+    <p class="text-center">
+      Evaluate (P(x) % <strong>{{ g.prime_modulo }}</strong>) at x =
+      {% for i in range(1, g.num_counters+2) %}
+      {{ i }}
+      {% if not loop.last %}
+      ,
+      {% endif %}
+      {%endfor%}
+      :<br>
+      <table>
+        <th></th>
+        {% for value in g.values_nomod %}
+        <tr>
+          <td>P({{loop.index}}) % {{ g.prime_modulo }}  </td>
+          <td>&nbsp=&nbsp</td>
+          <td>({{ value }} % {{ g.prime_modulo }})</td>
+          <td>&nbsp=&nbsp</td>
+          <td><strong>{{ g.values[loop.index-1] }}</strong></td>
+        </tr>
+        {% endfor %}
+      </table>
+    </p>
+    <p class="text-center">
+      Each of these {{ g.num_counters + 1}} values will be sent to one of the {{ g.num_counters + 1}} vote counters respectively.<br>
+      Without access to all {{ g.num_counters + 1}} values, your vote cannot be decrypted.
+    </p>
+    <p class="text-center">Your ID:<br />{{ g.voterid }}</p><br />
+    <!-- flash flask messages for errors/notifications -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <script type="text/javascript">
+      window.onbeforeunload = function (e)  {
+        e = e || window.event;
+        var message = 'Your vote has not yet been submitted. Are you sure you want to leave?';
+        if (e) 
+        {
+          e.returnValue = message;
+        }
+        return message;
+      }
+    </script>
+  </div>  <!-- container (for bootstrap) -->
+</body>
+</html>
+<!---->

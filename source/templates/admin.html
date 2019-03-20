@@ -27,7 +27,7 @@
     <!-- specify topic of vote -->
     <div id="enterinfo"><br />
       <h1>Enter Vote Attributes:</h1><br>
-      <form id="entry" method="POST" action="/vote_sub">
+      <form id="entry" method="POST" action="/save_settings">
         <div class="row">
           <div class="col">
             <label for="title">Title of Election:</label><br />
@@ -46,18 +46,6 @@
                   </td>
                 </tr>
                 {% endfor %}
-                <!--
-                <tr id='option'>
-                  <td>
-                    <input type='text' name='option' value='1' />
-                  </td>
-                </tr>
-                <tr id='option'>
-                  <td>
-                    <input type='text' name='option' value='2' />
-                  </td>
-                </tr>
-                -->
               </table>
               <p>
                   <input type="button" value="Insert row">
