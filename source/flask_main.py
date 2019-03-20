@@ -16,13 +16,15 @@ from flask import Markup
 from flask import redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects import postgresql
-
+from scipy.interpolate import lagrange
+import numpy
 import os
 import json
 import logging
 import uuid
 from Crypto.PublicKey import RSA
 from Crypto.Util import number
+from fractions import Fraction
 
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -154,9 +156,47 @@ def generate():
         + '</textarea>' \
         + '</p>'
 
+def lagrange0(x, y):
+    x = numpy.array(x)
+    @numpy.vectorize
+    def interp():
+        dn = 0 - x
+        r = 0
+        for i in range(len(x)):
+            d = x[i] - x
+            f1 = Fraction(1,1)
+            for j in range(i):
+                f1 *= Fraction(dn[j], d[j])
+            f2 = Fraction(1,1)
+            for j in range(i+1, len(x)):
+                f2 *= Fraction(dn[j], d[j])
+            L = f1*f2
+            r = r + L * y[i]
+        return r
+    return interp()
+
 @app.route("/verify")
 def verify():
     app.logger.debug("ENTERING VERIFICATION")
+    g.num_counters = db.session.query(Settings).one().numCounters + 1
+    if len(db.session.query(Votes).all()) > 0:
+        g.values = db.session.query(Votes.votes).filter(Votes.confirmed == True).all()
+        g.num_voters = len(g.values)
+        g.sums = [sum([int(g.values[voter][0][counter]) for voter in range(g.num_voters)]) for counter in range(g.num_counters)]
+    else:
+        g.values = []
+        g.num_voters = 0
+        g.sums = [0 for _ in range(g.num_counters)]
+    g.prime_modulo = int(db.session.query(Settings).one().primeMod)
+    g.poly = lagrange(range(1,g.num_counters+1), g.sums)
+    g.vote_intersect = lagrange0(range(1,g.num_counters+1), g.sums)
+    g.max_voters = int(db.session.query(Settings).one().maxVoters)
+    g.vote_options = [item[0] for item in db.session.query(VoteOptions.name).all()]
+    g.num_options = len(g.vote_options)
+    g.intersect_mod = g.vote_intersect % g.prime_modulo
+    g.vote_results = [(g.intersect_mod // (g.max_voters**i)) % g.max_voters for i in range(0, g.num_options)]
+    g.max_votes = max(g.vote_results)
+    app.logger.debug(g.max_votes)
     g.voterid = get_user_id()
     return render_template('verify.html')
 
@@ -205,6 +245,7 @@ def save_settings():
     voting_options = request.form.getlist("option")
     app.logger.debug("vote options: " + str(voting_options))
     db.session.query(VoteOptions).delete()
+    db.session.query(Votes).delete()
     db.session.query(Settings).delete()
     index = 0
     for option in voting_options:

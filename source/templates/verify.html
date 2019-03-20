@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html lang="en">
 <head>
-  <title>404 page</title>
+  <title>Vote Results</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css"/>
   <!-- jquery from cdn. (probably cached)? -->
@@ -9,10 +9,114 @@
 
 
 </head>
+<style>
+  table {
+    text-align: right;
+    margin: auto;
+    table-layout: auto;
+  }
+  th, td{
+    text-align: right;
+    border: 1px solid black;
+    margin: auto;
+    min-width: auto
+  }
+  .flex-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center
+  }
+  .col {
+    flex: 0;
+  }
+</style>
 <body>
 
   <div class="container">
     <h1 class="text-center">Voting verification page</h1>
+    <p class="text-center">
+      <a href="index">HOME</a>
+    </p>
+    <p class="text-center">
+      Results:<br>
+      <table>
+        <tr>
+          <th>Option:</th>
+          <th>Votes:</th>
+        </tr>
+      {% for i in range( g.num_options ) %}
+        <tr>
+          {% if g.vote_results[i] == g.max_votes %}
+              <td><strong>{{ g.vote_options[i] }}</strong> </td>
+              <td><strong>{{ g.vote_results[i] }}</strong> </td>
+          {% else %}
+             <td>{{ g.vote_options[i] }}</td>
+              <td>{{ g.vote_results[i] }}</td>
+           
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+    </p>
+    <div class="flex-grid">
+        {% for counter in range( g.num_counters ) %}
+        <div class="col">
+        <table>
+          <th>Vote&nbspCounter&nbsp{{ loop.index }}</th>
+          {% for voter in range( g.num_voters ) %}
+            <tr><td>{{ g.values[voter][0][counter] }}</td></tr>
+            {% endfor %}
+            <tr><td><strong>Total&nbsp=&nbsp{{ g.sums[counter] }}</strong></td></tr>
+          </table>
+        </div>
+        {% endfor %}
+  </div>
+  <br>
+  <p class="text-center">
+    Interpolating (Lagrange) Polynomial through these points:<br>
+    {% for coeff in g.poly.c %}
+      {% if not loop.last %}
+        {{ coeff }} x^{{ g.num_counters - loop.index }} +<br>
+      {% else %}
+        <strong>{{ g.vote_intersect  }}</strong>
+      {% endif %}
+    {% endfor %}
+  </p>
+  <p class="text-center">
+    Take the constant term <strong>{{ g.vote_intersect  }}</strong> % {{ g.prime_modulo }}
+    <br>
+    ({{ g.prime_modulo }} was the prime modulus selected for this election)
+    <br>
+    {{ g.vote_intersect  }} % {{ g.prime_modulo }} = <strong>{{ g.intersect_mod }}</strong>
+    <br>
+    This value can be expressed as a linear combination of powers of {{ g.max_voters }} 
+    <br>
+    ({{ g.max_voters }} was the maximum voter count decided before the election)
+    <br>
+    <strong>{{ g.intersect_mod }}</strong> = 
+    {% for i in range(g.num_options) %}
+      <strong>{{ g.vote_results[i] }}</strong> * {{ g.max_voters }}^{{ i }} 
+      {% if not loop.last %}
+        +
+      {% endif %}
+    {% endfor %}
+    <br>
+    This demonstrates:
+    {% for i in range(g.num_options) %}
+      {% if loop.last %}
+        and
+      {% endif %}
+      <br>
+      <strong>{{ g.vote_results[i] }}</strong>
+      votes cast for 
+      {% if not loop.last %}
+      {{ g.vote_options[i] }},
+      {% else %}
+        {{ g.vote_options[i] }}
+      {% endif %}
+    {% endfor %}
+  </p>
     <!-- flash flask messages for errors/notifications -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
