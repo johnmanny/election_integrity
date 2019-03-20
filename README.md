@@ -15,17 +15,17 @@ acting as user-defined keys. Those user-defined coefficients help facilitate the
 encrypted values which are transmitted to the respective vote counters.
 
 ### Voting
-A polynomial with a degree equal the number of vote counters minus one is then used with 
-the voter-defined coefficients-per-term to calculate each specific vote counters value. An
-election-wide prime modulus is then used to encrypt each value before sending it off to its 
+A polynomial with a degree equal to the number of vote counters minus one is then used with 
+the voter-defined coefficients to calculate each specific vote counters value. An
+election-wide prime modulus is then used with this value before sending it off to its 
 respective vote counter. 
 
 ### Voting results
-To tally up votes, each vote counter's sum of encrypted values are then used as points for
+To tally up votes, each vote counter's sum of encrypted values are used as points for
 an Interpolating Lagrange Polynomial in order to find the constant term. Once it's found, 
 the number of maximum voters allowed (defined at the beginning of the election) is used to
-find the vote tally for each option when expressing the constant term as a linear combination
-of the maximum voter count.
+find the vote tally for each election option when expressing the constant term as a linear 
+combination of the maximum voter count.
 
 ## Creating a vote
 Defining elections and their options must be done through the administration page. 
