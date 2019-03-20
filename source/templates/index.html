@@ -26,12 +26,19 @@
     <div class="col-sm-9">
       <h4><small>INFORMATION</small></h4>
       <hr>
-        <p>This project demonstrates a voting encryption scheme which uses homomorphic secret 
-        sharing and features vote verification using Lagrange polynomials. Each vote is encoded
-        as a constant term in a polynomial with the coefficients of the remaining terms acting as
-        user-defined keys. Those user-defined coefficients allow the voter to send separate terms 
-        , all carrying information about the vote they cast, to different designated vote counters
-        and eventually tally their vote.</p></ b>
+
+        <p>This project demonstrates a voting encryption scheme
+        which uses homomorphic secret sharing and features vote verification using Lagrange polynomials.
+        Each vote is encoded as a constant term in a polynomial with the coefficients of the remaining terms
+        acting as user-defined keys. Those user-defined coefficients allow the voter to send separate encrypted
+        values to the respective vote counters.</p></ b>
+
+        <p>Here's the math explanation:
+        Each encrypted value represents their polynomial equation
+        using terms equal to the number of vote counters where each term is (vote counter number
+        *chosen coefficients^votecounterindex). After each calculated term is summed (also adding a constant value
+        representing their vote), a voter-wide prime modulus chosen at the beginning of the vote
+        is used to obtain the encrypted value to be sent to the vote counters.</p> </ b>
 
         <p>To participate in a vote, click the <a href="register">register to vote</a> link and generate a key. Once you do
 	that, the server stores it automatically. From there you can go to the <a href="vote">vote</a> page and record 
