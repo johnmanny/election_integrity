@@ -115,8 +115,11 @@ def index():
 
 @app.route("/vote")
 def vote():
-    # set session items for displaying
     g.voterid = get_user_id()
+    vote = db.session.query(Votes).filter_by(uuid=str(g.voterid)).first()
+    if vote and vote.confirmed:
+        flash("You have already participated in this vote")
+        return render_template('index.html')
     g.vote_title = db.session.query(Settings).one().title
     g.vote_options = VoteOptions.query.all()
     if 'publickey' not in session:
@@ -177,6 +180,7 @@ def lagrange0(x, y):
 
 @app.route("/verify")
 def verify():
+    g.voterid = get_user_id()
     app.logger.debug("ENTERING VERIFICATION")
     g.num_counters = db.session.query(Settings).one().numCounters + 1
     if len(db.session.query(Votes).all()) > 0:
@@ -197,7 +201,6 @@ def verify():
     g.vote_results = [(g.intersect_mod // (g.max_voters**i)) % g.max_voters for i in range(0, g.num_options)]
     g.max_votes = max(g.vote_results)
     app.logger.debug(g.max_votes)
-    g.voterid = get_user_id()
     return render_template('verify.html')
 
 @app.route("/admin")
@@ -268,6 +271,11 @@ def save_settings():
 @app.route("/vote_send", methods=['POST'])
 def vote_send():
     app.logger.debug('in vote_send()')
+    g.voterid = get_user_id()
+    vote = db.session.query(Votes).filter_by(uuid=str(g.voterid)).first()
+    if vote and vote.confirmed:
+        flash("You have already participated in this vote")
+        return render_template('index.html')
     g.vote_index  = request.form["votes"]
     g.coefficients = list(map(int, request.form.getlist("coefficients")))
     app.logger.debug(g.vote_index)
@@ -275,7 +283,7 @@ def vote_send():
     g.vote_name = db.session.query(VoteOptions).filter_by(index=g.vote_index).first().name
     g.max_voters = int(db.session.query(Settings).one().maxVoters)
     g.vote_value = g.max_voters**int(g.vote_index)
-    g.voterid = get_user_id()
+    
     g.vote_title = db.session.query(Settings).one().title
     g.vote_options = VoteOptions.query.all()
     if 'publickey' not in session:

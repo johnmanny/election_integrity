@@ -138,55 +138,59 @@
           <input class="button" type="submit" name="submit_vote" value="Submit Vote" disabled>
         </div>
       </form>
-      <script class="cssdeck" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js">
-      </script>
-      <script class="cssdeck">
-        $(function() {
-          $('input').filter( function(){return this.type == 'range' } ).each(function(){  
-            var $slider = $(this),
-            $text_box = $('#'+$(this).attr('link-to'));
+    <script class="cssdeck">
+      $(function() {
+        $('input').filter( function(){return this.type == 'range' } ).each(function(){  
+          var $slider = $(this),
+          $text_box = $('#'+$(this).attr('link-to'));
 
+          $text_box.val(this.value);
+
+          $slider.change(function(){
             $text_box.val(this.value);
+          });
 
-            $slider.change(function(){
-              $text_box.val(this.value);
-            });
-
-            $text_box.change(function(){
-              $slider.val($text_box.val());
-            });
+          $text_box.change(function(){
+            $slider.val($text_box.val());
           });
         });
-        $(function (){
-          $('input').filter( function(){return this.type == 'radio' } ).each(function(){  
-            var $radio = $(this);
-            $radio.change(function(){
-              document.getElementsByName("submit_vote")[0].disabled = false;
-            });
+      });
+      $(function (){
+        $('input').filter( function(){return this.type == 'radio' } ).each(function(){  
+          var $radio = $(this);
+          $radio.change(function(){
+            document.getElementsByName("submit_vote")[0].disabled = false;
           });
         });
-        window.onbeforeunload = function(e){
-          e = e || window.event;
-          var message = 'Your vote has not yet been submitted. Are you sure you want to leave?';
-          if (e) 
-          {
-            e.returnValue = message;
+      });  
+      var submitted = false;
+       $(document).ready(function () {
+        window.onbeforeunload = function (e) {
+          if (!submitted) {
+            var message = "You have not saved your changes.", e = e || window.event;
+            if (e) {
+              e.returnValue = message;
+            }
+            return message;
           }
-          return message;
-        }        
-          </script>
-          <p class="text-center">Your ID:<br />{{ g.voterid }}</p><br />
-          <!-- flash flask messages for errors/notifications -->
-          {% with messages = get_flashed_messages() %}
-          {% if messages %}
-          <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {% endwith %}
+        }
+        $("form").submit(function() {
+         submitted = true;
+       });
+      });
+    </script>
+    <p class="text-center">Your ID:<br />{{ g.voterid }}</p><br />
+    <!-- flash flask messages for errors/notifications -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 
-        </div>  <!-- container (for bootstrap) -->
-      </body>
-      </html>
+  </div>  <!-- container (for bootstrap) -->
+</body>
+</html>

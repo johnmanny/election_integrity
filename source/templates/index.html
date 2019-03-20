@@ -18,19 +18,17 @@
     <p class="text-center">
       <a href="vote">VOTE HERE</a>
     </p>
-    <p class="text-center">Your ID: {{ g.voterid }}</p><br />
-    <br />
-    <!-- flash flask messages for errors/notifications -->
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <ul class=flashes>
+        <p class="text-center">
         {% for message in messages %}
-          <li>{{ message }}</li>
+          <strong>{{ message }}</strong>
         {% endfor %}
-        </ul>
+        </p>
       {% endif %}
     {% endwith %}
-
+    <p class="text-center">Your ID: {{ g.voterid }}</p><br />
+    <br />
   </div>  <!-- container (for bootstrap) -->
 
 <div class="container-fluid">
