@@ -1,11 +1,11 @@
 # Election Integrity
-## Authors:
-Taylor Santos, John Nemeth
 
-## Description
 This project is a webserver (setup for heroku deployment) which demonstrates
 a small-scale election encryption scheme which allows for voters to transmit
 their encrypted votes to different vote counters as well as verify the voting results.
+
+## Authors:
+Taylor Santos, John Nemeth
 
 ## How it works
 The operation of the project can be described as showcasing a voting encryption scheme 
@@ -25,7 +25,7 @@ To tally up votes, each vote counter's sum of encrypted values are then used as 
 an Interpolating Lagrange Polynomial in order to find the constant term. Once it's found, 
 the number of maximum voters allowed (defined at the beginning of the election) is used to
 find the vote tally for each option when expressing the constant term as a linear combination
-of the maximum voter count. . 
+of the maximum voter count.
 
 ## Creating a vote
 Defining elections and their options must be done through the administration page. 
