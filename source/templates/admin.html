@@ -12,6 +12,18 @@
 
   <div class="container">
     <h1 class="text-center">Voting administration page</h1>
+    <div class="container-fluid">
+      <div class="row content">
+        <div class="col-sm-3 sidenav">
+          <br /><a href="index">Home</a><br />
+          <a href="register">Register To Vote</a><br />
+          <a href="vote">Vote</a><br />
+          <a href="verify">Verify Results</a><br />
+          <a href="admin">Administration</a><br />
+          <br>
+        </div>
+      </div>
+    </div>
     <!-- flash flask messages for errors/notifications -->
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -26,7 +38,6 @@
     {% if session.wp is defined %}
     <!-- specify topic of vote -->
     <div id="enterinfo"><br />
-      <h1>Enter Vote Attributes:</h1><br>
       <form id="entry" method="POST" action="/save_settings">
         <div class="row">
           <div class="col">

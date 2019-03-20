@@ -32,12 +32,20 @@
   }
 </style>
 <body>
-
   <div class="container">
-    <h1 class="text-center">Voting verification page</h1>
-    <p class="text-center">
-      <a href="index">HOME</a>
-    </p>
+    <h1 class="text-center">Voting Results</h1>
+    <div class="container-fluid">
+      <div class="row content">
+        <div class="col-sm-3 sidenav">
+          <br /><a href="index">Home</a><br />
+          <a href="register">Register To Vote</a><br />
+          <a href="vote">Vote</a><br />
+          <a href="verify">Verify Results</a><br />
+          <a href="admin">Administration</a><br />
+          <br>
+        </div>
+      </div>
+    </div>
     <p class="text-center">
       Results:<br>
       <table>
@@ -127,11 +135,6 @@
         </ul>
       {% endif %}
     {% endwith %}
-
-
-
-
   </div>  <!-- container (for bootstrap) -->
-
 </body>
 </html>

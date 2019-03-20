@@ -10,12 +10,18 @@
 <body>
   <div class="container">
     <h1 class="text-center">Election Integrity Registration Page</h1>
-    <p class="text-center">
-      <a href="index">HOME</a>
-    </p>
-    <p class="text-center">
-      <a href="vote">VOTE HERE</a>
-    </p>
+    <div class="container-fluid">
+      <div class="row content">
+        <div class="col-sm-3 sidenav">
+          <br /><a href="index">Home</a><br />
+          <a href="register">Register To Vote</a><br />
+          <a href="vote">Vote</a><br />
+          <a href="verify">Verify Results</a><br />
+          <a href="admin">Administration</a><br />
+          <br>
+        </div>
+      </div>
+    </div>
     <p class="text-center">
       <button type="button" onclick="loadDoc()">Generate Key</button>
       <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
